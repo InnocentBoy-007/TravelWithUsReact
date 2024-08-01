@@ -3,16 +3,38 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Button, Image, Badge, Carousel, Card, Stack } from 'react-bootstrap'
 import PaginationComponent from '../Components/Pagination';
+import { useEffect, useState } from 'react';
 
 function ResponsiveAutoExample() {
+    let [users, setUsers] = useState([]);
+    useEffect(() => {
+        fetch('https://66aa0588613eced4eba73a23.mockapi.io/api/users/display1', {
+            method: 'GET',
+            headers: { 'content-type': 'application/json' },
+        }).then(res => {
+            if (res.ok) {
+                return res.json();
+            }
+
+        }).then(tasks => {
+            // print the task or smthing else
+            setUsers(tasks)
+            // Do something with the list of tasks
+        }).catch(error => {
+            // handle error
+        })
+    }, [])
     return (
         <main>
             <Container fluid className='md'>
                 <Row className='my-0 px-2'>
                     <Col sm={6}><Image src="https://picsum.photos/900/400" fluid /></Col>
                     <Col sm={6}>
-                        <h3>Welcome to the joy of nature</h3>
-                        <p>Text messaging is most often used between private mobile phone users, as a substitute for voice calls in situations where voice communication is impossible or undesirable (e.g., during a school class or a work meeting). Texting is also used to communicate very brief messages, such as informing someone that you will be late or reminding a friend or colleague about a meeting. As with e-mail, informality and brevity have become an accepted part of text messaging. Some text messages such as SMS can also be used for the remote control of home appliances. It is widely used in domotics systems. Some amateurs have also built their own systems to control (some of) their appliances via SMS.[17][18] A Flash SMS is a type[19] of text message that appears directly on the main screen without user interaction and is not automatically stored in the inbox. It can be useful in cases such as an emergency (e.g., fire alarm) or confidentiality (e.g., one-time password).[20] Texting is also used to communicate very brief messages, such as informing someone that you will be late or reminding a friend or colleague about a meeting. As with e-mail, informality and brevity have become an accepted part of text messaging. Some text messages such as SMS can also be used for the remote control of home appliances.</p>
+                        {users.map(user => (
+                            <div key={user.id}><h3>{user.heading}</h3>
+                            <p>{user.subheading}</p>
+                            </div>
+                        ))}
                         <Stack direction="horizontal" gap={2}>
                             <Badge bg="primary">Enjoyment</Badge>
                             <Badge bg="secondary">Thrill</Badge>
